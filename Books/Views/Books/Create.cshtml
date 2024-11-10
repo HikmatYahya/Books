@@ -2,66 +2,82 @@
 
 @{
     ViewData["Title"] = "Create";
-   
 }
 
-<h1>Create</h1>
+<h1>Create a New Book</h1>
 
-<h4>Book</h4>
+<h4>Book Information</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
+    <div class="col-md-6 offset-md-3">
         <form asp-action="Create">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <!-- Title Field -->
             <div class="form-group">
-                <label asp-for="Title" class="control-label"></label>
-                <input asp-for="Title" class="form-control" />
+                <label asp-for="Title" class="control-label">Title</label>
+                <input asp-for="Title" class="form-control" placeholder="Enter the book title" />
                 <span asp-validation-for="Title" class="text-danger"></span>
             </div>
+
+            <!-- ISBN Field -->
             <div class="form-group">
-                <label asp-for="ISBN" class="control-label"></label>
-                <input asp-for="ISBN" class="form-control" />
+                <label asp-for="ISBN" class="control-label">ISBN</label>
+                <input asp-for="ISBN" class="form-control" placeholder="Enter the ISBN number" />
                 <span asp-validation-for="ISBN" class="text-danger"></span>
             </div>
+
+            <!-- Publish Date Field -->
             <div class="form-group">
-                <label asp-for="PublishDate" class="control-label"></label>
-                <input asp-for="PublishDate" class="form-control" />
+                <label asp-for="PublishDate" class="control-label">Publication Date</label>
+                <input asp-for="PublishDate" type="date" class="form-control" />
                 <span asp-validation-for="PublishDate" class="text-danger"></span>
             </div>
+
+            <!-- Price Field -->
             <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
+                <label asp-for="Price" class="control-label">Price</label>
+                <input asp-for="Price" type="number" step="0.01" class="form-control" placeholder="Enter the price" />
                 <span asp-validation-for="Price" class="text-danger"></span>
             </div>
+
+            <!-- Author Field (Dropdown) -->
             <div class="form-group">
-                <label asp-for="AuthorId" class="control-label"></label>
-                <select asp-for="AuthorId" class="form-control" asp-items="@(ViewData["AuthorId"] as SelectList)"></select>
+                <label asp-for="AuthorId" class="control-label">Author</label>
+                <select asp-for="AuthorId" class="form-control" asp-items="@(ViewData["AuthorId"] as SelectList)">
+                    <option value="">Select an author</option>
+                </select>
                 <span asp-validation-for="AuthorId" class="text-danger"></span>
             </div>
 
-
-
+            <!-- Genre Field -->
             <div class="form-group">
-                <label asp-for="Genre" class="control-label"></label>
-                <input asp-for="Genre" class="form-control" />
+                <label asp-for="Genre" class="control-label">Genre</label>
+                <input asp-for="Genre" class="form-control" placeholder="Enter the book genre" />
                 <span asp-validation-for="Genre" class="text-danger"></span>
             </div>
+
+            <!-- Summary Field -->
             <div class="form-group">
-                <label asp-for="Summary" class="control-label"></label>
-                <input asp-for="Summary" class="form-control" />
+                <label asp-for="Summary" class="control-label">Summary</label>
+                <textarea asp-for="Summary" class="form-control" rows="4" placeholder="Enter a brief summary of the book"></textarea>
                 <span asp-validation-for="Summary" class="text-danger"></span>
             </div>
+
+            <!-- Submit Button -->
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Create Book" class="btn btn-primary btn-block" />
             </div>
         </form>
     </div>
 </div>
 
-<div>
+<div class="text-center">
     <a asp-action="Index">Back to List</a>
 </div>
 
 @section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 }

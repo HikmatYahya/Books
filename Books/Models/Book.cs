@@ -13,7 +13,7 @@
         public double Price { get; set; }        // Price
 
         // Foreign Key to Author
-        public int AuthorId { get; set; }
+        public int? AuthorId { get; set; } // Nullable Foreign Key to Author
         public Author Author { get; set; }        // Navigation property
 
         // Optional additional properties

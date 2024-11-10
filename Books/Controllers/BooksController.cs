@@ -57,7 +57,6 @@ namespace Books.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Title,ISBN,PublishDate,Price,AuthorId,Genre,Summary")] Book book)
         {
-            // Added
             if (ModelState.IsValid)
             {
                 _context.Add(book);
@@ -65,10 +64,11 @@ namespace Books.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            // If ModelState is invalid, reload the authors list
-            ViewData["AuthorId"] = new SelectList(_context.Authors, "Id", "LastName", book.AuthorId);
+            // If model state is invalid, reload the authors list
+            ViewData["AuthorId"] = new SelectList(_context.Authors, "Id", "Name", book.AuthorId); // Ensure the list of authors is passed here
             return View(book);
         }
+
 
 
         // GET: Books/Edit/5
