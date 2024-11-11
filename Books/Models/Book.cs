@@ -12,6 +12,8 @@
         public DateTime PublishDate { get; set; } // Publication date
         public double Price { get; set; }        // Price
 
+        // New comment
+
         // Foreign Key to Author
         public int? AuthorId { get; set; } // Nullable Foreign Key to Author
         public Author Author { get; set; }        // Navigation property
