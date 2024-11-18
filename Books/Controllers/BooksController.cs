@@ -20,11 +20,20 @@ namespace Books.Controllers
         }
 
         // GET: Books
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string searchString )
         {
-            var applicationDbContext = _context.Books.Include(b => b.Author);
-            return View(await applicationDbContext.ToListAsync());
+            var books = _context.Books.Include(b => b.Author).AsQueryable();
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                books = books.Where(b => b.Title.Contains(searchString) ||
+                                         b.Genre.Contains(searchString) ||
+                                         (b.Author.FirstName + " " + b.Author.LastName).Contains(searchString));
+            }
+
+            return View(await books.ToListAsync());
         }
+
 
         // GET: Books/Details/5
         public async Task<IActionResult> Details(int? id)
@@ -48,7 +57,9 @@ namespace Books.Controllers
         public IActionResult Create()
         {
             // Load authors for the dropdown
-            ViewData["AuthorId"] = new SelectList(_context.Authors, "Id", "LastName");
+           
+
+            ViewBag.AuthorId = new SelectList(_context.Authors, "Id", "LastName");
             return View();
         }
 
@@ -57,22 +68,36 @@ namespace Books.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("Title,ISBN,PublishDate,Price,AuthorId,Genre,Summary")] Book book)
         {
-            if (ModelState.IsValid)
+
+
+          //  if (ModelState.IsValid)
             {
-                _context.Add(book);
+
+				// Fetch the Author from the database based on AuthorId
+				var author = await _context.Authors.FindAsync(book.AuthorId);
+
+				if (author != null)
+				{
+					// Manually associate the Author with the Book
+					book.Author = author;
+				}
+
+
+				_context.Add(book);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
 
-            // If model state is invalid, reload the authors list
-            ViewData["AuthorId"] = new SelectList(_context.Authors, "Id", "Name", book.AuthorId); // Ensure the list of authors is passed here
-            return View(book);
-        }
+			// If model state is invalid, reload the authors list
+			ViewBag.AuthorId = new SelectList(_context.Authors, "Id", "LastName", book.AuthorId);
+			return View(book);
+
+		}
 
 
 
-        // GET: Books/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+		// GET: Books/Edit/5
+		public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
             {
@@ -101,7 +126,7 @@ namespace Books.Controllers
                 return NotFound();
             }
 
-            if (ModelState.IsValid)
+           // if (ModelState.IsValid)
             {
                 try
                 {
