@@ -1,0 +1,77 @@
+﻿@model IEnumerable<Rental>
+
+@{
+    ViewData["Title"] = "Rental List";
+}
+
+<h1 class="mb-4">@ViewData["Title"]</h1>
+
+<p>
+    <a class="btn btn-primary" asp-action="Create">Create New Rental</a>
+</p>
+
+@if (Model.Any())
+{
+    <table class="table table-bordered table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.RentedOn)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.DueDate)
+                </th>
+                <th scope="col">
+                    @Html.DisplayNameFor(model => model.ReturnedOn)
+                </th>
+                <th scope="col">
+                    Book
+                </th>
+                <th scope="col">
+                    Rented By
+                </th>
+                <th scope="col">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @item.RentedOn.ToString("MMMM dd, yyyy")
+                    </td>
+                    <td>
+                        @item.DueDate.ToString("MMMM dd, yyyy")
+                    </td>
+                    <td>
+                        @if (item.ReturnedOn.HasValue)
+                        {
+                            @item.ReturnedOn.Value.ToString("MMMM dd, yyyy")
+                        }
+                        else
+                        {
+                            <span class="text-danger">Not Returned</span>
+                        }
+                    </td>
+                    <td>
+                        <a asp-action="Details" asp-route-id="@item.Book.Id">@item.Book.Title</a>
+                    </td>
+                    <td>
+                        @item.User.UserName ?? item.User.UserName
+                    </td>
+                    <td>
+                        <a class="btn btn-warning btn-sm" asp-action="Edit" asp-route-id="@item.Id">Edit</a>
+                        <a class="btn btn-info btn-sm" asp-action="Details" asp-route-id="@item.Id">Details</a>
+                        <a class="btn btn-danger btn-sm" asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <div class="alert alert-info" role="alert">
+        No rentals found. <a asp-action="Create" class="alert-link">Create a new rental</a>.
+    </div>
+}
